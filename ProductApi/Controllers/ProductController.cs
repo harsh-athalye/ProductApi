@@ -27,6 +27,11 @@ namespace ProductApi.Controllers
         {
             Product product;
 
+            if(id<=0)
+            {
+                return BadRequest("Invalid product id");
+            }
+
             try
             {
                 product = await _productService.GetByIdAsync(id);
@@ -51,6 +56,11 @@ namespace ProductApi.Controllers
         public async Task<IActionResult> GetProductByName(string name)
         {
             List<Product> products;
+
+            if(string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Invalid product name");
+            }
 
             try
             {
@@ -104,6 +114,11 @@ namespace ProductApi.Controllers
         [SwaggerResponse(200)]
         public async Task<IActionResult> CreateProduct(ProductVM product)
         {
+            if(product == null)
+            {
+                return BadRequest("Invalid request payload");
+            }
+
             _logger.LogInformation($"Add Request:{JsonConvert.SerializeObject(product)}");
 
             try
@@ -123,6 +138,11 @@ namespace ProductApi.Controllers
         [SwaggerResponse(200)]
         public async Task<IActionResult> UpdateProduct(int id, ProductVM product)
         {
+            if ((id <=0) || (product == null))
+            {
+                return BadRequest("Invalid request payload");
+            }
+
             _logger.LogInformation($"Update Request - id: {id}, payload: {JsonConvert.SerializeObject(product)}");
 
             try
@@ -155,6 +175,11 @@ namespace ProductApi.Controllers
         [SwaggerResponse(200)]
         public async Task<IActionResult> DeleteProduct(int id)
         {
+            if(id <= 0)
+            {
+                return BadRequest("Invalid product id");
+            }
+
             _logger.LogInformation($"Delete product with id: {id}");
 
             try
